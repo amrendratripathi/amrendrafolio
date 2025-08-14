@@ -44,7 +44,7 @@ const Contact = () => {
       icon: Mail,
       label: "Email",
       username: "Get in touch",
-      action: "mailto:amrendra.tripathi@example.com",
+      action: "mailto:amrendraramtripathibtech23-27@liet.in",
       color: "hover:text-primary",
     },
   ];
