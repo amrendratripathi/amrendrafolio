@@ -9,7 +9,7 @@ const Contact = () => {
       icon: Mail,
       label: "Email",
       value: "amrendraramtripathibtech23-27@liet.in",
-      action: "mailto:your-amrendraramtripathibtech23-27@liet.in",
+      action: "mailto:amrendraramtripathibtech23-27@liet.in",
     },
     {
       icon: Phone,
