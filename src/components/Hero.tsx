@@ -66,10 +66,17 @@ const Hero = () => {
               </a>
 
               {/* Download CV Button */}
-              <Button variant="outline" size="lg" className="group">
-                <Download className="group-hover:translate-y-1 transition-transform" />
-                Download CV
-              </Button>
+              <a
+                href="/lovable-uploads/Amrendra_CV.pdf"
+                download="Amrendra_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="lg" className="group">
+                  <Download className="group-hover:translate-y-1 transition-transform" />
+                  Download CV
+                </Button>
+              </a>
             </div>
 
             <div className="flex gap-4 justify-center lg:justify-start pt-4">
