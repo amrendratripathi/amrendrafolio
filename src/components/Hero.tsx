@@ -53,10 +53,19 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-              <Button variant="hero" size="lg" className="group">
-                <Mail className="group-hover:rotate-12 transition-transform" />
-                Get In Touch
-              </Button>
+              {/* Get In Touch Button */}
+              <a
+                href="mailto:amrendraramtripathibtech23-27@liet.in"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="hero" size="lg" className="group">
+                  <Mail className="group-hover:rotate-12 transition-transform" />
+                  Get In Touch
+                </Button>
+              </a>
+
+              {/* Download CV Button */}
               <Button variant="outline" size="lg" className="group">
                 <Download className="group-hover:translate-y-1 transition-transform" />
                 Download CV
