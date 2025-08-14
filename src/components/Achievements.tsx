@@ -1,11 +1,44 @@
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Award, Target, Star, Users } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
 //import { Autoplay, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
+
+const HackathonSlideshow = () => {
+  const images = [
+    "/lovable-uploads/hackathon1.jpg",
+    "/lovable-uploads/hackathon2.jpg",
+    "/lovable-uploads/hackathon3.jpg",
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [images.length]);
+
+  return (
+    <div className="relative w-full lg:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Hackathon Picture ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            index === currentIndex ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Achievements = () => {
   const achievements = [
@@ -130,56 +163,8 @@ const Achievements = () => {
             <Card className="gradient-card border-border/50 shadow-elegant relative overflow-hidden">
               <CardContent className="p-8">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
-                  {/* Slideshow */}
-                  <div className="flex-shrink-0 w-full lg:w-1/2 relative">
-                    <div className="relative">
-                      <Swiper
-                        spaceBetween={30}
-                        slidesPerView={1}
-                        loop={true}
-                        autoplay={{
-                          delay: 3000,
-                          disableOnInteraction: false,
-                        }}
-                        navigation={{
-                          nextEl: ".custom-next",
-                          prevEl: ".custom-prev",
-                        }}
-                       // modules={[Autoplay, Navigation]}
-                        className="rounded-lg overflow-hidden shadow-lg"
-                      >
-                        <SwiperSlide>
-                          <img
-                            src="/lovable-uploads/hackathon1.jpg"
-                            alt="HackIndia Picture 1"
-                            className="w-full h-auto object-cover"
-                          />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <img
-                            src="/lovable-uploads/hackathon2.jpg"
-                            alt="HackIndia Picture 2"
-                            className="w-full h-auto object-cover"
-                          />
-                        </SwiperSlide>
-                        <SwiperSlide>
-                          <img
-                            src="/lovable-uploads/hackathon3.jpg"
-                            alt="HackIndia Picture 3"
-                            className="w-full h-auto object-cover"
-                          />
-                        </SwiperSlide>
-                      </Swiper>
-
-                      {/* Custom Navigation Buttons */}
-                      {/* <button className="custom-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10">
-                        Prev
-                      </button>
-                      <button className="custom-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10">
-                        Next
-                      </button> */}
-                    </div>
-                  </div>
+                  {/* Custom Slideshow */}
+                  <HackathonSlideshow />
 
                   {/* Achievement Details */}
                   <div className="flex-1 text-center lg:text-left">
