@@ -46,7 +46,7 @@ const Skills = () => {
               Skills & Expertise
             </Badge>
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Technical <span className="gradient-primary bg-clip-text text-transparent">Arsenal</span>
+              Technical <span className="gradient-primary bg-clip-text text-transparent">Competencies</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               A comprehensive skill set built through competitive programming, academic pursuits, and hands-on projects.
