@@ -186,4 +186,68 @@
   .animate-slide-up {
     animation: slideInUp 0.8s ease-out;
   }
+
+  /* Galaxy Animation */
+  @keyframes galaxy {
+    0% {
+      transform: translateY(-100vh) translateX(0px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-50vh) translateX(50px) rotate(180deg);
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) translateX(100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .animate-galaxy {
+    animation: galaxy linear infinite;
+  }
+
+  /* Twinkle Animation for Stars */
+  @keyframes twinkle {
+    0%, 100% { 
+      opacity: 0.3; 
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 1; 
+      transform: scale(1.2);
+    }
+  }
+
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  /* Falling Star Animation with Angle */
+  @keyframes falling-star {
+    0% {
+      transform: translateY(-100vh) translateX(0px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) translateX(150px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .animate-falling-star {
+    animation: falling-star linear infinite;
+  }
 }
