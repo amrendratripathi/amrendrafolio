@@ -176,7 +176,7 @@ const Hero = () => {
                 BTech 3rd Year • Competitive Programmer
               </Badge>
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                Hi, I'm{" "}
+                <div>Hi, I'm</div>
                 <span className="gradient-primary bg-clip-text text-transparent">
                   <TypewriterText 
                     texts={[
@@ -246,18 +246,27 @@ const Hero = () => {
                 </Button>
               </a>
               <a href="https://www.codechef.com/users/amrendra_tr06" target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
+                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors relative group">
                   <img src="/icons/codechef.svg" alt="CodeChef" className="w-5 h-5" />
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Div 2, ⭐⭐⭐⭐
+                  </div>
                 </Button>
               </a>
               <a href="https://leetcode.com/amrendra06" target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
+                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors relative group">
                   <img src="/icons/leetcode.svg" alt="LeetCode" className="w-5 h-5" />
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    270+ questions
+                  </div>
                 </Button>
               </a>
               <a href="https://www.hackerrank.com/amrendra_tr06" target="_blank" rel="noopener noreferrer">
-                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
+                <Button variant="ghost" size="icon" className="hover:text-primary transition-colors relative group">
                   <img src="/icons/hackerrank.svg" alt="HackerRank" className="w-5 h-5" />
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    5⭐ Problem Solving
+                  </div>
                 </Button>
               </a>
             </div>
