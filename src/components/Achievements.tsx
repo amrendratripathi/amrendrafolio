@@ -7,25 +7,19 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 
-const HackathonSlideshow = () => {
-  const images = [
-    "/lovable-uploads/hackathon1.jpg",
-    "/lovable-uploads/hackathon2.jpg",
-    "/lovable-uploads/hackathon3.jpg",
-  ];
-
+const HackathonSlideshow = ({ images, intervalMs = 3000, className = "" }: { images: string[]; intervalMs?: number; className?: string; }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 3000); // Change slide every 3 seconds
+    }, intervalMs);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [images.length]);
+    return () => clearInterval(interval);
+  }, [images.length, intervalMs]);
 
   return (
-    <div className="relative w-full lg:w-1/2 h-64 rounded-lg overflow-hidden shadow-lg">
+    <div className={`relative rounded-lg overflow-hidden ${className || "w-full lg:w-1/2 h-64 shadow-lg"}`}>
       {images.map((image, index) => (
         <img
           key={index}
@@ -108,26 +102,26 @@ const Achievements = () => {
           {/* Featured Achievement */}
           <div className="mb-12">
             <Card className="gradient-card border-border/50 shadow-elegant relative overflow-hidden">
-              <div className="absolute top-4 right-4">
-                <Badge variant="default" className="bg-accent text-accent-foreground">
-                  Latest Achievement
-                </Badge>
-              </div>
               <CardContent className="p-8">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
-                  {/* Achievement Image */}
-                  <div className="flex-shrink-0">
-                    <div className="w-48 h-32 rounded-lg overflow-hidden shadow-elegant">
-                      <img
-                        src="/lovable-uploads/c2aa145c-f8f7-4302-8dbb-84845ee5f998.png"
-                        alt="Hackathon Achievement"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                  {/* Achievement Image (Slideshow) */}
+                  <div className="flex-shrink-0 w-full lg:w-1/2">
+                    <HackathonSlideshow
+                      images={[
+                        "/lovable-uploads/c2aa145c-f8f7-4302-8dbb-84845ee5f998.png",
+                        "/lovable-uploads/codeastra1.png",
+                        "/lovable-uploads/codeastra2.png",
+                      ]}
+                      intervalMs={3000}
+                      className="w-full lg:w-1/2 h-64 shadow-lg"
+                    />
                   </div>
 
                   {/* Achievement Details */}
                   <div className="flex-1 text-center lg:text-left">
+                    <div className="mb-3 flex justify-center lg:justify-start">
+                      <Badge variant="default" className="bg-accent text-accent-foreground">Latest Achievement</Badge>
+                    </div>
                     <div className="flex items-center justify-center lg:justify-start space-x-3 mb-4">
                       <div className="p-3 rounded-lg gradient-primary text-primary-foreground">
                         <Trophy size={24} />
@@ -164,7 +158,14 @@ const Achievements = () => {
               <CardContent className="p-8">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
                   {/* Custom Slideshow */}
-                  <HackathonSlideshow />
+                  <HackathonSlideshow
+                    images={[
+                      "/lovable-uploads/hackathon1.jpg",
+                      "/lovable-uploads/hackathon2.jpg",
+                      "/lovable-uploads/hackathon3.jpg",
+                    ]}
+                    intervalMs={3000}
+                  />
 
                   {/* Achievement Details */}
                   <div className="flex-1 text-center lg:text-left">
