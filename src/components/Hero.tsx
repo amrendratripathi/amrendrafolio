@@ -13,9 +13,12 @@ const Hero = () => {
 
   const profileImages = [
     "/lovable-uploads/7a686bb6-aad2-4682-beee-897a4806c503.png",
-    "/lovable-uploads/pic1.png",
-    "/lovable-uploads/pic2.png"
+    "/lovable-uploads/pic1.png"
   ];
+
+  const handleImageError = () => {
+    setCurrentImageIndex(0);
+  };
 
   // Rotate images every 5 seconds
   useEffect(() => {
@@ -160,6 +163,7 @@ const Hero = () => {
                 <img
                   src={profileImages[currentImageIndex]}
                   alt="Amrendra Ram Tripathi"
+                  onError={handleImageError}
                   className="w-full h-full object-cover rounded-full transition-all duration-1000 ease-in-out transform hover:scale-105"
                 />
               </div>
