@@ -72,15 +72,15 @@ const Hero = () => {
         <div className="absolute top-140 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "0.8s" }}></div>
         <div className="absolute top-160 left-4/5 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "1.8s" }}></div>
         
-        {/* Colored Stars */}
-        <div className="absolute top-30 left-1/8 w-2 h-2 bg-blue-300 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }}></div>
-        <div className="absolute top-50 left-7/8 w-2 h-2 bg-purple-300 rounded-full animate-twinkle" style={{ animationDelay: "1.3s" }}></div>
-        <div className="absolute top-70 left-1/5 w-2 h-2 bg-pink-300 rounded-full animate-twinkle" style={{ animationDelay: "0.7s" }}></div>
-        <div className="absolute top-90 left-4/5 w-2 h-2 bg-cyan-300 rounded-full animate-twinkle" style={{ animationDelay: "1.7s" }}></div>
+        {/* Accent and grayscale stars */}
+        <div className="absolute top-30 left-1/8 w-2 h-2 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }}></div>
+        <div className="absolute top-50 left-7/8 w-2 h-2 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "1.3s" }}></div>
+        <div className="absolute top-70 left-1/5 w-2 h-2 bg-primary/60 rounded-full animate-twinkle" style={{ animationDelay: "0.7s" }}></div>
+        <div className="absolute top-90 left-4/5 w-2 h-2 bg-white/50 rounded-full animate-twinkle" style={{ animationDelay: "1.7s" }}></div>
         
         {/* Large Stars */}
-        <div className="absolute top-110 left-1/3 w-3 h-3 bg-yellow-300 rounded-full animate-twinkle" style={{ animationDelay: "0.2s" }}></div>
-        <div className="absolute top-130 left-2/3 w-3 h-3 bg-orange-300 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }}></div>
+        <div className="absolute top-110 left-1/3 w-3 h-3 bg-white/70 rounded-full animate-twinkle" style={{ animationDelay: "0.2s" }}></div>
+        <div className="absolute top-130 left-2/3 w-3 h-3 bg-primary/70 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }}></div>
         
         {/* Falling Stars with Angle */}
         <div className="absolute top-0 left-1/4 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "0s", animationDuration: "8s" }}></div>
@@ -92,29 +92,29 @@ const Hero = () => {
         <div className="absolute top-0 left-1/3 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "6s", animationDuration: "8.5s" }}></div>
         <div className="absolute top-0 left-4/5 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "7s", animationDuration: "7.5s" }}></div>
         
-        {/* Colored Falling Stars */}
-        <div className="absolute top-0 left-1/8 w-2 h-2 bg-blue-300 rounded-full animate-falling-star" style={{ animationDelay: "0.5s", animationDuration: "12s" }}></div>
-        <div className="absolute top-0 left-7/8 w-2 h-2 bg-purple-300 rounded-full animate-falling-star" style={{ animationDelay: "3.5s", animationDuration: "9.5s" }}></div>
-        <div className="absolute top-0 left-1/5 w-2 h-2 bg-pink-300 rounded-full animate-falling-star" style={{ animationDelay: "1.5s", animationDuration: "10.5s" }}></div>
-        <div className="absolute top-0 left-4/5 w-2 h-2 bg-cyan-300 rounded-full animate-falling-star" style={{ animationDelay: "4.5s", animationDuration: "8s" }}></div>
+        {/* Accent Falling Stars */}
+        <div className="absolute top-0 left-1/8 w-2 h-2 bg-white/60 rounded-full animate-falling-star" style={{ animationDelay: "0.5s", animationDuration: "12s" }}></div>
+        <div className="absolute top-0 left-7/8 w-2 h-2 bg-primary/60 rounded-full animate-falling-star" style={{ animationDelay: "3.5s", animationDuration: "9.5s" }}></div>
+        <div className="absolute top-0 left-1/5 w-2 h-2 bg-white/60 rounded-full animate-falling-star" style={{ animationDelay: "1.5s", animationDuration: "10.5s" }}></div>
+        <div className="absolute top-0 left-4/5 w-2 h-2 bg-white/40 rounded-full animate-falling-star" style={{ animationDelay: "4.5s", animationDuration: "8s" }}></div>
         
         {/* Planets (positioned away from name area) */}
         <div 
-          className="absolute top-1/4 right-1/4 w-16 h-16 bg-gradient-to-br from-blue-400/30 to-purple-600/30 rounded-full shadow-lg"
+          className="absolute top-1/4 right-1/4 w-16 h-16 bg-gradient-to-br from-white/20 to-primary/20 rounded-full shadow-lg"
           style={{ 
             transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
             transition: 'transform 0.1s ease-out'
           }}
         ></div>
         <div 
-          className="absolute bottom-1/3 left-1/3 w-12 h-12 bg-gradient-to-br from-green-400/30 to-blue-500/30 rounded-full shadow-lg"
+          className="absolute bottom-1/3 left-1/3 w-12 h-12 bg-gradient-to-br from-white/10 to-white/30 rounded-full shadow-lg"
           style={{ 
             transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`,
             transition: 'transform 0.1s ease-out'
           }}
         ></div>
         <div 
-          className="absolute top-1/2 right-1/6 w-10 h-10 bg-gradient-to-br from-red-400/30 to-orange-500/30 rounded-full shadow-lg"
+          className="absolute top-1/2 right-1/6 w-10 h-10 bg-gradient-to-br from-primary/25 to-white/15 rounded-full shadow-lg"
           style={{ 
             transform: `translate(${mousePosition.x * 0.4}px, ${mousePosition.y * 0.4}px)`,
             transition: 'transform 0.1s ease-out'
@@ -123,14 +123,14 @@ const Hero = () => {
         
         {/* Galaxies */}
         <div 
-          className="absolute top-1/6 left-1/6 w-24 h-24 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-full blur-sm"
+          className="absolute top-1/6 left-1/6 w-24 h-24 bg-gradient-to-br from-white/10 to-primary/15 rounded-full blur-sm"
           style={{ 
             transform: `translate(${mousePosition.x * 0.2}px, ${mousePosition.y * 0.2}px) rotate(${mousePosition.x * 2}deg)`,
             transition: 'transform 0.1s ease-out'
           }}
         ></div>
         <div 
-          className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-full blur-sm"
+          className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-gradient-to-br from-white/10 to-white/20 rounded-full blur-sm"
           style={{ 
             transform: `translate(${mousePosition.x * 0.25}px, ${mousePosition.y * 0.25}px) rotate(${mousePosition.y * 2}deg)`,
             transition: 'transform 0.1s ease-out'
@@ -139,14 +139,14 @@ const Hero = () => {
         
         {/* Nebula Clouds */}
         <div 
-          className="absolute top-1/3 left-1/2 w-32 h-16 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-md"
+          className="absolute top-1/3 left-1/2 w-32 h-16 bg-gradient-to-r from-white/10 to-primary/10 rounded-full blur-md"
           style={{ 
             transform: `translate(${mousePosition.x * 0.15}px, ${mousePosition.y * 0.15}px)`,
             transition: 'transform 0.1s ease-out'
           }}
         ></div>
         <div 
-          className="absolute bottom-1/3 right-1/4 w-28 h-12 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-full blur-md"
+          className="absolute bottom-1/3 right-1/4 w-28 h-12 bg-gradient-to-r from-white/10 to-white/20 rounded-full blur-md"
           style={{ 
             transform: `translate(${mousePosition.x * 0.18}px, ${mousePosition.y * 0.18}px)`,
             transition: 'transform 0.1s ease-out'
