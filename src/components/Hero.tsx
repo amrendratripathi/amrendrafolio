@@ -159,12 +159,12 @@ const Hero = () => {
           {/* Profile Image */}
           <div className="flex justify-center lg:justify-start">
             <div className="relative">
-              <div className="w-80 h-80 rounded-full gradient-card shadow-elegant p-2">
+              <div className="w-80 h-80 rounded-2xl gradient-card shadow-elegant p-2 transform-gpu transition-bounce hover:-translate-y-1 hover:rotate-1 hover:shadow-primary hover:scale-[1.02] hover-shake">
                 <img
                   src={profileImages[currentImageIndex]}
                   alt="Amrendra Ram Tripathi"
                   onError={handleImageError}
-                  className="w-full h-full object-cover rounded-full transition-all duration-1000 ease-in-out transform hover:scale-105"
+                  className="w-full h-full object-cover rounded-xl transition-all duration-700 ease-in-out"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 w-20 h-20 gradient-primary rounded-full flex items-center justify-center shadow-primary">

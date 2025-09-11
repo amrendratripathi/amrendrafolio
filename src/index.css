@@ -181,6 +181,20 @@
     animation: slideInUp 0.8s ease-out;
   }
 
+  /* Subtle hover shake for images/cards */
+  @keyframes hover-shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(-1px, 1px) rotate(-0.3deg); }
+    40% { transform: translate(1px, -1px) rotate(0.3deg); }
+    60% { transform: translate(-1px, 0) rotate(-0.2deg); }
+    80% { transform: translate(1px, 1px) rotate(0.2deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  .hover-shake:hover {
+    animation: hover-shake 300ms ease-in-out 1;
+  }
+ 
   /* Galaxy Animation */
   @keyframes galaxy {
     0% {
