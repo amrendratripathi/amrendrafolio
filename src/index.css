@@ -194,7 +194,7 @@
   .hover-shake:hover {
     animation: hover-shake 300ms ease-in-out 1;
   }
- 
+
   /* Galaxy Animation */
   @keyframes galaxy {
     0% {

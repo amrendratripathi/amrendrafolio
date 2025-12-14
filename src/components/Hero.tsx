@@ -5,11 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useState, useEffect } from "react";
 import TypewriterText from "@/components/TypewriterText";
+import Particles from "@/components/Particles";
 
 const Hero = () => {
-  const [bgColor, setBgColor] = useState("bg-primary/10");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const profileImages = [
     "/lovable-uploads/7a686bb6-aad2-4682-beee-897a4806c503.png",
@@ -29,129 +28,20 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, [profileImages.length]);
 
-  // Track mouse movement for parallax effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      setMousePosition({ x, y });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  const handleMouseEnter = () => {
-    setBgColor("bg-accent/10"); // Change to your desired hover color
-  };
-
-  const handleMouseLeave = () => {
-    setBgColor("bg-primary/10"); // Reset to the original color
-  };
-
   return (
-    <section
-      className={`min-h-screen flex items-center justify-center gradient-hero relative overflow-hidden ${bgColor}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      <div className="absolute top-20 left-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }}></div>
-
-      {/* Static Galaxy Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Stars */}
-        <div className="absolute top-20 left-1/4 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "0s" }}></div>
-        <div className="absolute top-40 left-3/4 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "1s" }}></div>
-        <div className="absolute top-60 left-1/2 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "2s" }}></div>
-        <div className="absolute top-80 left-1/6 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "0.5s" }}></div>
-        <div className="absolute top-100 left-5/6 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "1.5s" }}></div>
-        <div className="absolute top-120 left-2/3 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "2.5s" }}></div>
-        <div className="absolute top-140 left-1/3 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "0.8s" }}></div>
-        <div className="absolute top-160 left-4/5 w-1 h-1 bg-white rounded-full animate-twinkle" style={{ animationDelay: "1.8s" }}></div>
-        
-        {/* Accent and grayscale stars */}
-        <div className="absolute top-30 left-1/8 w-2 h-2 bg-white/60 rounded-full animate-twinkle" style={{ animationDelay: "0.3s" }}></div>
-        <div className="absolute top-50 left-7/8 w-2 h-2 bg-white/40 rounded-full animate-twinkle" style={{ animationDelay: "1.3s" }}></div>
-        <div className="absolute top-70 left-1/5 w-2 h-2 bg-primary/60 rounded-full animate-twinkle" style={{ animationDelay: "0.7s" }}></div>
-        <div className="absolute top-90 left-4/5 w-2 h-2 bg-white/50 rounded-full animate-twinkle" style={{ animationDelay: "1.7s" }}></div>
-        
-        {/* Large Stars */}
-        <div className="absolute top-110 left-1/3 w-3 h-3 bg-white/70 rounded-full animate-twinkle" style={{ animationDelay: "0.2s" }}></div>
-        <div className="absolute top-130 left-2/3 w-3 h-3 bg-primary/70 rounded-full animate-twinkle" style={{ animationDelay: "1.2s" }}></div>
-        
-        {/* Falling Stars with Angle */}
-        <div className="absolute top-0 left-1/4 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "0s", animationDuration: "8s" }}></div>
-        <div className="absolute top-0 left-3/4 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "2s", animationDuration: "6s" }}></div>
-        <div className="absolute top-0 left-1/2 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "4s", animationDuration: "10s" }}></div>
-        <div className="absolute top-0 left-1/6 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "1s", animationDuration: "7s" }}></div>
-        <div className="absolute top-0 left-5/6 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "3s", animationDuration: "9s" }}></div>
-        <div className="absolute top-0 left-2/3 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "5s", animationDuration: "11s" }}></div>
-        <div className="absolute top-0 left-1/3 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "6s", animationDuration: "8.5s" }}></div>
-        <div className="absolute top-0 left-4/5 w-1 h-1 bg-white rounded-full animate-falling-star" style={{ animationDelay: "7s", animationDuration: "7.5s" }}></div>
-        
-        {/* Accent Falling Stars */}
-        <div className="absolute top-0 left-1/8 w-2 h-2 bg-white/60 rounded-full animate-falling-star" style={{ animationDelay: "0.5s", animationDuration: "12s" }}></div>
-        <div className="absolute top-0 left-7/8 w-2 h-2 bg-primary/60 rounded-full animate-falling-star" style={{ animationDelay: "3.5s", animationDuration: "9.5s" }}></div>
-        <div className="absolute top-0 left-1/5 w-2 h-2 bg-white/60 rounded-full animate-falling-star" style={{ animationDelay: "1.5s", animationDuration: "10.5s" }}></div>
-        <div className="absolute top-0 left-4/5 w-2 h-2 bg-white/40 rounded-full animate-falling-star" style={{ animationDelay: "4.5s", animationDuration: "8s" }}></div>
-        
-        {/* Planets (positioned away from name area) */}
-        <div 
-          className="absolute top-1/4 right-1/4 w-16 h-16 bg-gradient-to-br from-white/20 to-primary/20 rounded-full shadow-lg"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-1/3 left-1/3 w-12 h-12 bg-gradient-to-br from-white/10 to-white/30 rounded-full shadow-lg"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        <div 
-          className="absolute top-1/2 right-1/6 w-10 h-10 bg-gradient-to-br from-primary/25 to-white/15 rounded-full shadow-lg"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.4}px, ${mousePosition.y * 0.4}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        
-        {/* Galaxies */}
-        <div 
-          className="absolute top-1/6 left-1/6 w-24 h-24 bg-gradient-to-br from-white/10 to-primary/15 rounded-full blur-sm"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.2}px, ${mousePosition.y * 0.2}px) rotate(${mousePosition.x * 2}deg)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-1/4 right-1/3 w-20 h-20 bg-gradient-to-br from-white/10 to-white/20 rounded-full blur-sm"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.25}px, ${mousePosition.y * 0.25}px) rotate(${mousePosition.y * 2}deg)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        
-        {/* Nebula Clouds */}
-        <div 
-          className="absolute top-1/3 left-1/2 w-32 h-16 bg-gradient-to-r from-white/10 to-primary/10 rounded-full blur-md"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.15}px, ${mousePosition.y * 0.15}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
-        <div 
-          className="absolute bottom-1/3 right-1/4 w-28 h-12 bg-gradient-to-r from-white/10 to-white/20 rounded-full blur-md"
-          style={{ 
-            transform: `translate(${mousePosition.x * 0.18}px, ${mousePosition.y * 0.18}px)`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        ></div>
+    <section className="min-h-screen flex items-center justify-center gradient-hero relative overflow-hidden">
+      {/* Particles Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <Particles
+          particleColors={['#ffffff', '#06b6d4']}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
