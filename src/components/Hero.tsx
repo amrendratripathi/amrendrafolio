@@ -71,7 +71,7 @@ const Hero = () => {
               </Badge>
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
                 <div>Hi, I'm</div>
-                <span className="gradient-primary bg-clip-text text-transparent">
+                <span className="gradient-primary bg-clip-text text-transparent text-4xl sm:text-5xl md:text-5xl lg:text-6xl whitespace-nowrap">
                   <TypewriterText 
                     texts={[
                       "Amrendra Tripathi",
