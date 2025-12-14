@@ -114,6 +114,17 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+  /* Disable smooth scroll on mobile for stability */
+  @media (max-width: 767px) {
+    html {
+      scroll-behavior: auto !important;
+    }
+    
+    * {
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Custom utility classes */
   .gradient-primary {
     background: var(--gradient-primary);

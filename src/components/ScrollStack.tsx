@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useRef, useCallback } from 'react';
+import React, { useLayoutEffect, useRef, useCallback, useEffect } from 'react';
 
 import type { ReactNode } from 'react';
 import Lenis from 'lenis';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export interface ScrollStackItemProps {
   itemClassName?: string;
@@ -51,6 +52,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   useWindowScroll = false,
   onStackComplete
 }) => {
+  const isMobile = useIsMobile();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const stackCompletedRef = useRef(false);
   const animationFrameRef = useRef<number | null>(null);
@@ -280,16 +282,55 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   }, [updateCardTransforms]);
 
   const setupLenis = useCallback(() => {
+    // Disable Lenis on mobile devices for stable native scrolling
+    if (isMobile) {
+      // Use native scroll events on mobile with throttling
+      let rafId: number | null = null;
+      const scrollHandler = () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        rafId = requestAnimationFrame(() => {
+          handleScroll();
+          rafId = null;
+        });
+      };
+      
+      if (useWindowScroll) {
+        window.addEventListener('scroll', scrollHandler, { passive: true });
+      } else {
+        const scroller = scrollerRef.current;
+        if (scroller) {
+          scroller.addEventListener('scroll', scrollHandler, { passive: true });
+        }
+      }
+      
+      return () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        if (useWindowScroll) {
+          window.removeEventListener('scroll', scrollHandler);
+        } else {
+          const scroller = scrollerRef.current;
+          if (scroller) {
+            scroller.removeEventListener('scroll', scrollHandler);
+          }
+        }
+      };
+    }
+
+    // Use Lenis smooth scroll only on desktop
     if (useWindowScroll) {
       const lenis = new Lenis({
         duration: 1.0,
         easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        touchMultiplier: 2,
+        touchMultiplier: 1,
         infinite: false,
         wheelMultiplier: 0.6,
         lerp: 0.12,
-        syncTouch: true,
+        syncTouch: false,
         syncTouchLerp: 0.1
       });
 
@@ -316,12 +357,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         duration: 1.0,
         easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        touchMultiplier: 2,
+        touchMultiplier: 1,
         infinite: false,
         gestureOrientation: 'vertical',
         wheelMultiplier: 0.6,
         lerp: 0.12,
-        syncTouch: true,
+        syncTouch: false,
         syncTouchLerp: 0.1
       });
 
@@ -338,7 +379,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       return lenis;
     }
-  }, [handleScroll, useWindowScroll]);
+  }, [handleScroll, useWindowScroll, isMobile]);
 
   useLayoutEffect(() => {
     if (!useWindowScroll && !scrollerRef.current) return;
@@ -368,7 +409,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.transformStyle = 'preserve-3d';
     });
 
-    setupLenis();
+    const cleanup = setupLenis();
 
     updateCardTransforms();
 
@@ -379,10 +420,16 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       if (lenisRef.current) {
         lenisRef.current.destroy();
+        lenisRef.current = null;
       }
 
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // Call cleanup function if it exists (for mobile native scroll)
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup();
       }
 
       stackCompletedRef.current = false;
@@ -417,11 +464,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={{
         overscrollBehavior: 'contain',
         WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
+        scrollBehavior: isMobile ? 'auto' : 'smooth',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
         willChange: 'scroll-position',
-        height: useWindowScroll ? 'auto' : '100%'
+        height: useWindowScroll ? 'auto' : '100%',
+        touchAction: 'pan-y'
       }}
     >
         <div className="scroll-stack-inner pt-[5vh] md:pt-[10vh] px-4 md:px-8 lg:px-20 pb-[25vh] min-h-[300vh]">
