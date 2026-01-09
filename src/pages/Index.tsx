@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -7,9 +8,25 @@ import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
 
 const Index = () => {
+  const [showNavbar, setShowNavbar] = useState(false);
+
+  useEffect(() => {
+    const handleAnimationComplete = () => {
+      setShowNavbar(true);
+    };
+
+    window.addEventListener('hero-animation-complete', handleAnimationComplete);
+    
+    return () => {
+      window.removeEventListener('hero-animation-complete', handleAnimationComplete);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <div className={`transition-opacity duration-500 ${showNavbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <Navigation />
+      </div>
       
       <main>
         <section id="home">

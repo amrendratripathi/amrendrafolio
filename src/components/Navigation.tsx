@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram } from "lucide-react";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,8 +61,25 @@ const Navigation = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="hero" size="lg" className="group">
+              <Button variant="hero" size="lg" className="group px-4">
                 Hire Me
+              </Button>
+            </a>
+            {/* Instagram Button */}
+            <a
+              href="https://www.instagram.com/amrendratripathi06"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="relative overflow-hidden transition-all duration-300 hover:scale-110 active:scale-95 group p-0 bg-transparent hover:bg-transparent"
+                style={{
+                  background: 'linear-gradient(45deg, #833AB4 0%, #E1306C 25%, #F77737 50%, #FCAF45 100%)',
+                }}
+              >
+                <Instagram className="w-5 h-5 relative z-10 text-white" />
               </Button>
             </a>
           </div>
