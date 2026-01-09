@@ -161,7 +161,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center justify-center min-h-screen py-20">
           {/* Name and Image Layout */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 lg:gap-6 xl:gap-8 mb-12 w-full max-w-full px-2">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 lg:gap-3 xl:gap-4 mb-12 w-full max-w-full px-2">
             {/* AMRENDRA - Left Side */}
             <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 mt-8 md:mt-0 ${
               showFirstName ? 'opacity-100' : 'opacity-0'
