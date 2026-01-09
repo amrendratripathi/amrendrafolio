@@ -163,7 +163,7 @@ const Hero = () => {
           {/* Name and Image Layout */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-2 lg:gap-3 xl:gap-4 mb-12 w-full max-w-full px-2">
             {/* AMRENDRA - Left Side */}
-            <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 mt-4 md:mt-0 ${
+            <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 mt-2 md:mt-0 ${
               showFirstName ? 'opacity-100' : 'opacity-0'
             }`}>
               <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
@@ -205,7 +205,7 @@ const Hero = () => {
             </div>
 
             {/* TRIPATHI - Right Side */}
-            <div className={`order-3 flex-shrink-0 transition-opacity duration-500 mt-4 md:mt-0 ${
+            <div className={`order-3 flex-shrink-0 transition-opacity duration-500 mt-2 md:mt-0 ${
               showLastName ? 'opacity-100' : 'opacity-0'
             }`}>
               <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
