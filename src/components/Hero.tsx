@@ -163,10 +163,10 @@ const Hero = () => {
           {/* Name and Image Layout */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 lg:gap-6 xl:gap-8 mb-12 w-full max-w-full px-2">
             {/* AMRENDRA - Left Side */}
-            <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 ${
+            <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 mt-8 md:mt-0 ${
               showFirstName ? 'opacity-100' : 'opacity-0'
             }`}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
+              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
                 {showFirstName && (animationPhase === 'first-name' || animationPhase === 'photo' || animationPhase === 'last-name' || animationPhase === 'complete') ? (
                   animationPhase === 'first-name' ? (
                     <SimpleTypewriter text="AMRENDRA" speed={150} onComplete={handleFirstNameComplete} />
@@ -205,10 +205,10 @@ const Hero = () => {
             </div>
 
             {/* TRIPATHI - Right Side */}
-            <div className={`order-3 flex-shrink-0 transition-opacity duration-500 ${
+            <div className={`order-3 flex-shrink-0 transition-opacity duration-500 mt-8 md:mt-0 ${
               showLastName ? 'opacity-100' : 'opacity-0'
             }`}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
+              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
                 {showLastName && (animationPhase === 'last-name' || animationPhase === 'complete') ? (
                   animationPhase === 'last-name' ? (
                     <SimpleTypewriter text="TRIPATHI" speed={150} onComplete={handleLastNameComplete} />
