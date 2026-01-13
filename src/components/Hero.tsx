@@ -1,45 +1,53 @@
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, Download, Instagram } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Particles from "@/components/Particles";
 
-// Simple Typewriter component for single text
-const SimpleTypewriter = ({ text, speed = 100, onComplete }: { text: string; speed?: number; onComplete?: () => void }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
+// Split Text Animation Component
+const SplitTextAnimation = ({ text, fontSize = 'text-3xl', onComplete }: { text: string; fontSize?: string; onComplete?: () => void }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const chars = text.split('');
 
   useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayText(text.slice(0, currentIndex + 1));
-        setCurrentIndex(currentIndex + 1);
-      }, speed);
-      return () => clearTimeout(timer);
-    } else if (onComplete) {
-      const completeTimer = setTimeout(() => {
-        onComplete();
-      }, 500);
-      return () => clearTimeout(completeTimer);
-    }
-  }, [currentIndex, text, speed, onComplete]);
+    // Trigger animation after a brief delay
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <span>
-      {displayText}
-      {currentIndex < text.length && <span className="animate-pulse text-primary">|</span>}
-    </span>
+    <div className={`flex flex-wrap items-center justify-center gap-1 sm:gap-2 ${fontSize}`}>
+      {chars.map((char, index) => (
+        <span
+          key={index}
+          className={`inline-block transition-all duration-500 ${
+            isVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8'
+          }`}
+          style={{
+            transitionDelay: `${index * 50}ms`,
+            fontFamily: "'Satisfy', cursive",
+            fontWeight: 400
+          }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </div>
   );
 };
 
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [animationPhase, setAnimationPhase] = useState<'hey-there' | 'first-name' | 'photo' | 'last-name' | 'complete'>('hey-there');
+  const [animationPhase, setAnimationPhase] = useState<'hey-there' | 'photo' | 'names' | 'complete'>('hey-there');
   const [showHeyThere, setShowHeyThere] = useState(true);
-  const [heyThereFadeIn, setHeyThereFadeIn] = useState(false);
-  const [showFirstName, setShowFirstName] = useState(false);
   const [showPhoto, setShowPhoto] = useState(false);
-  const [showLastName, setShowLastName] = useState(false);
+  const [showNames, setShowNames] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const nameRef = useRef<HTMLDivElement>(null);
 
   const profileImages = [
     "/lovable-uploads/7a686bb6-aad2-4682-beee-897a4806c503.png",
@@ -52,56 +60,56 @@ const Hero = () => {
 
   // Animation sequence
   useEffect(() => {
-    // Phase 0: Fade in "Hey There"
-    const fadeInTimer = setTimeout(() => {
-      setHeyThereFadeIn(true);
-    }, 100);
-
-    // Phase 1: Show "Hey There" for 3 seconds then fade out
+    // Phase 1: Show "Hey There I'm" with split text animation for 3 seconds
     const heyThereTimer = setTimeout(() => {
       setShowHeyThere(false);
-      setTimeout(() => {
-        setAnimationPhase('first-name');
-        setShowFirstName(true);
-      }, 1000); // Fade out duration
-    }, 3000);
+      // Photo appears immediately after "Hey There I'm" disappears
+      setAnimationPhase('photo');
+      setShowPhoto(true);
+    }, 3000); // 3 seconds
 
     return () => {
-      clearTimeout(fadeInTimer);
       clearTimeout(heyThereTimer);
     };
   }, []);
 
-  // Phase 2: After first name completes, show photo
-  const handleFirstNameComplete = () => {
-    setTimeout(() => {
-      setAnimationPhase('photo');
-      setShowPhoto(true);
-    }, 300);
-  };
-
-  // Phase 3: After photo appears, show last name
+  // Phase 2: After photo appears, wait 2 seconds then show names simultaneously with focus animation
   useEffect(() => {
     if (showPhoto) {
       const photoTimer = setTimeout(() => {
-        setAnimationPhase('last-name');
-        setShowLastName(true);
-      }, 500);
+        setAnimationPhase('names');
+        setShowNames(true);
+        
+        // Trigger focus animation on both name elements
+        setTimeout(() => {
+          if (nameRef.current) {
+            nameRef.current.classList.add('focus-animation');
+            // Also add to the last name (TRIPATHI) - find it via sibling
+            const lastNameElement = nameRef.current.parentElement?.querySelector('.order-3');
+            if (lastNameElement) {
+              lastNameElement.classList.add('focus-animation');
+            }
+          }
+        }, 100);
+      }, 2000); // 2 seconds after photo appears
       return () => clearTimeout(photoTimer);
     }
   }, [showPhoto]);
 
-  // Phase 4: After last name completes, show all content
-  const handleLastNameComplete = () => {
-    setTimeout(() => {
-      setAnimationPhase('complete');
-      setShowContent(true);
-      // Trigger navbar and other content to appear (via callback to parent)
-      if (window.dispatchEvent) {
-        window.dispatchEvent(new CustomEvent('hero-animation-complete'));
-      }
-    }, 500);
-  };
+  // Phase 3: After names appear, show all content
+  useEffect(() => {
+    if (showNames) {
+      const namesTimer = setTimeout(() => {
+        setAnimationPhase('complete');
+        setShowContent(true);
+        // Trigger navbar and other content to appear
+        if (window.dispatchEvent) {
+          window.dispatchEvent(new CustomEvent('hero-animation-complete'));
+        }
+      }, 1000);
+      return () => clearTimeout(namesTimer);
+    }
+  }, [showNames]);
 
   // Rotate images every 5 seconds (only after animation completes)
   useEffect(() => {
@@ -130,58 +138,42 @@ const Hero = () => {
         />
       </div>
 
-      {/* "Hey There" Overlay */}
+      {/* "Hey There I'm" Overlay with Split Text Animation */}
       {showHeyThere && (
-        <div className={`absolute inset-0 flex flex-col items-center justify-center z-50 transition-opacity duration-1000 ${
-          showHeyThere && heyThereFadeIn ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}>
-          <h2 
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white"
-            style={{ 
-              fontFamily: "'Great Vibes', 'Dancing Script', cursive",
-              fontWeight: 400,
-              letterSpacing: '0.05em'
-            }}
-          >
-            Hey There
-          </h2>
-          <h2 
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] text-white mt-4"
-            style={{ 
-              fontFamily: "'Great Vibes', 'Dancing Script', cursive",
-              fontWeight: 400,
-              letterSpacing: '0.05em'
-            }}
-          >
-            I'm
-          </h2>
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-50 transition-none">
+          <div className="text-white text-center">
+            <div className="mb-2">
+              <SplitTextAnimation text="Hey There" fontSize="text-2xl sm:text-3xl md:text-4xl lg:text-5xl" />
+            </div>
+            <div>
+              <SplitTextAnimation text="I'm" fontSize="text-3xl sm:text-4xl md:text-5xl lg:text-6xl" />
+            </div>
+          </div>
         </div>
       )}
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center justify-center min-h-screen py-20">
-          {/* Name and Image Layout */}
+          {/* Name and Image Layout - Photo in center between names */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-2 lg:gap-3 xl:gap-4 mb-12 w-full max-w-full px-2">
             {/* AMRENDRA - Left Side */}
-            <div className={`order-2 md:order-1 flex-shrink-0 transition-opacity duration-500 mt-2 md:mt-0 ${
-              showFirstName ? 'opacity-100' : 'opacity-0'
-            }`}>
-              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
-                {showFirstName && (animationPhase === 'first-name' || animationPhase === 'photo' || animationPhase === 'last-name' || animationPhase === 'complete') ? (
-                  animationPhase === 'first-name' ? (
-                    <SimpleTypewriter text="AMRENDRA" speed={150} onComplete={handleFirstNameComplete} />
-                  ) : (
-                    'AMRENDRA'
-                  )
-                ) : (
-                  ''
-                )}
+            <div 
+              ref={nameRef}
+              className={`order-2 md:order-1 flex-shrink-0 mt-2 md:mt-0 transition-all duration-1000 ${
+                showNames ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <h1 
+                className="text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] text-white uppercase tracking-wide leading-tight whitespace-nowrap"
+                style={{ fontFamily: "'Anton', sans-serif" }}
+              >
+                AMRENDRA
               </h1>
             </div>
 
-            {/* Profile Image with Glowing Ring - Center */}
-            <div className={`order-1 md:order-2 relative flex items-center justify-center flex-shrink-0 transition-all duration-700 ${
-              showPhoto ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            {/* Profile Image with Glowing Ring - Center (appears independently) */}
+            <div className={`order-1 md:order-2 relative flex items-center justify-center flex-shrink-0 transition-none ${
+              showPhoto ? 'opacity-100 scale-100' : 'opacity-0 scale-100'
             }`}>
               <div className="relative">
                 {/* Outer Glowing Ring Effect */}
@@ -205,19 +197,16 @@ const Hero = () => {
             </div>
 
             {/* TRIPATHI - Right Side */}
-            <div className={`order-3 flex-shrink-0 transition-opacity duration-500 mt-2 md:mt-0 ${
-              showLastName ? 'opacity-100' : 'opacity-0'
-            }`}>
-              <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase tracking-wide leading-tight whitespace-nowrap">
-                {showLastName && (animationPhase === 'last-name' || animationPhase === 'complete') ? (
-                  animationPhase === 'last-name' ? (
-                    <SimpleTypewriter text="TRIPATHI" speed={150} onComplete={handleLastNameComplete} />
-                  ) : (
-                    'TRIPATHI'
-                  )
-                ) : (
-                  ''
-                )}
+            <div 
+              className={`order-3 flex-shrink-0 mt-2 md:mt-0 transition-all duration-1000 ${
+                showNames ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <h1 
+                className="text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] text-white uppercase tracking-wide leading-tight whitespace-nowrap"
+                style={{ fontFamily: "'Anton', sans-serif" }}
+              >
+                TRIPATHI
               </h1>
             </div>
           </div>

@@ -295,4 +295,34 @@
   *::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, hsl(187 92% 48% / 0.7), hsl(187 92% 48%));
   }
+
+  /* Focus Animation for Names */
+  @keyframes focus-in {
+    0% {
+      filter: blur(20px);
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    50% {
+      filter: blur(10px);
+      transform: scale(1.02);
+    }
+    100% {
+      filter: blur(0px);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .focus-animation h1 {
+    animation: focus-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .order-2.focus-animation h1 {
+    animation-delay: 0s;
+  }
+
+  .order-3.focus-animation h1 {
+    animation-delay: 0.1s;
+  }
 }
