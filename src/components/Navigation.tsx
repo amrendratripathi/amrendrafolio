@@ -57,7 +57,7 @@ const Navigation = () => {
             ))}
             {/* Hire Me Button */}
             <a
-              href="mailto:amrendraramtripathibtech23-27@liet.in?subject=We%20want%20to%20hire%20you"
+              href="mailto:rajjubabu06@gmail.com?subject=We%20want%20to%20hire%20you"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -79,7 +79,7 @@ const Achievements = () => {
   ];
 
   return (
-    <section className="py-20 bg-background relative overflow-hidden">
+    <section id="achievements" className="pt-20 md:pt-24 pb-8 md:pb-12 bg-background relative overflow-hidden z-10" style={{ scrollMarginTop: '100px' }}>
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-6xl mx-auto">

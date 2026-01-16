@@ -217,7 +217,7 @@ const Hero = () => {
           }`}>
             {/* Get In Touch Button */}
             <a
-              href="mailto:amrendraramtripathibtech23-27@liet.in"
+              href="mailto:rajjubabu06@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -255,7 +255,7 @@ const Hero = () => {
                   <Linkedin />
                 </Button>
               </a>
-              <a href="mailto:your-amrendraramtripathibtech23-27@liet.in" target="_blank" rel="noopener noreferrer">
+              <a href="mailto:rajjubabu06@gmail.com" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="icon" className="hover:text-primary transition-colors scale-110">
                   <Mail />
                 </Button>

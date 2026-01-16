@@ -68,7 +68,7 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-8 md:py-12 gradient-hero relative overflow-hidden min-h-screen">
+    <section id="projects" className="pt-8 md:pt-12 pb-0 gradient-hero relative overflow-hidden" style={{ marginBottom: '0' }}>
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -171,6 +171,9 @@ const Projects = () => {
               ))}
             </ScrollStack>
           </div>
+          
+          {/* Spacer to ensure last project is fully visible before achievements */}
+          <div className="h-[60vh] md:h-[50vh] w-full pointer-events-none"></div>
         </div>
       </div>
     </section>

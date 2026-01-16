@@ -325,4 +325,18 @@
   .order-3.focus-animation h1 {
     animation-delay: 0.1s;
   }
+
+  /* Mobile optimizations for scroll stack */
+  @media (max-width: 768px) {
+    .scroll-stack-card {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      contain: layout style paint;
+    }
+
+    .scroll-stack-container {
+      -webkit-overflow-scrolling: touch;
+      overflow-scrolling: touch;
+    }
+  }
 }

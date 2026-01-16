@@ -9,17 +9,27 @@ export interface ScrollStackItemProps {
   children: ReactNode;
 }
 
-export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => (
-  <div
-    className={`scroll-stack-card relative w-full min-h-[500px] md:min-h-[600px] my-6 md:my-8 p-4 md:p-6 lg:p-8 rounded-2xl md:rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
-    style={{
-      backfaceVisibility: 'hidden',
-      transformStyle: 'preserve-3d'
-    }}
-  >
-    {children}
-  </div>
-);
+export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => {
+  const isMobile = useIsMobile();
+  
+  return (
+    <div
+      className={`scroll-stack-card relative w-full min-h-[500px] md:min-h-[600px] my-6 md:my-8 p-4 md:p-6 lg:p-8 rounded-2xl md:rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top ${itemClassName}`.trim()}
+      style={{
+        backfaceVisibility: 'hidden',
+        transformStyle: 'preserve-3d',
+        willChange: isMobile ? 'transform' : 'transform, filter',
+        WebkitBackfaceVisibility: 'hidden',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)',
+        WebkitPerspective: '1000px',
+        perspective: '1000px'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 interface ScrollStackProps {
   className?: string;
@@ -130,6 +140,35 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     const endElementTop = endElement ? getElementOffset(endElement) : 0;
 
+    // Calculate pinEnd based on last card's position to keep it static
+    const lastCardIndex = cardsRef.current.length - 1;
+    let calculatedPinEnd = endElementTop;
+    
+    if (cardsRef.current.length > 0 && cardsRef.current[lastCardIndex]) {
+      const lastCard = cardsRef.current[lastCardIndex];
+      const lastCardTop = getElementOffset(lastCard);
+      const lastCardHeight = lastCard.offsetHeight;
+      const lastCardStackOffset = stackPositionPx + itemStackDistance * lastCardIndex;
+      
+      // Calculate where the last card's bottom will be when fully pinned
+      // This is: cardTop + stackOffset + cardHeight
+      const lastCardBottomWhenPinned = lastCardTop + lastCardStackOffset + lastCardHeight;
+      
+      // PinEnd should be when we've scrolled enough that the last card's bottom
+      // reaches the top of the viewport - this ensures the card is fully visible
+      // before achievements section appears. No buffer needed as we want it to stay visible.
+      calculatedPinEnd = lastCardBottomWhenPinned - containerHeight;
+      
+      // Ensure pinEnd is at least as far as the endElement to prevent premature release
+      if (calculatedPinEnd < endElementTop - containerHeight) {
+        calculatedPinEnd = endElementTop - containerHeight * 0.2;
+      }
+    } else {
+      // Fallback to original calculation if no cards
+      const pinEndOffset = isMobile ? containerHeight * 0.2 : containerHeight * 0.3;
+      calculatedPinEnd = endElementTop - pinEndOffset;
+    }
+
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
 
@@ -139,7 +178,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const triggerEnd = cardTop - scaleEndPositionPx;
 
       const pinStart = cardTop - stackPositionPx - itemStackDistance * i;
-      const pinEnd = endElementTop - containerHeight / 2;
+      // Use calculated pinEnd to ensure last card stays static
+      const pinEnd = calculatedPinEnd;
 
       const scaleProgress = Math.max(0, Math.min(1, calculateProgress(scrollTop, triggerStart, triggerEnd)));
 
@@ -166,8 +206,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
         if (i < topCardIndex) {
           const depthInStack = topCardIndex - i;
-
-          blur = Math.max(0, Math.min(10, depthInStack * blurAmount));
+          // Reduce blur on mobile for better performance
+          const maxBlur = isMobile ? 5 : 10;
+          blur = Math.max(0, Math.min(maxBlur, depthInStack * blurAmount * (isMobile ? 0.6 : 1)));
         }
       }
 
@@ -178,10 +219,38 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       if (isPinned) {
         translateY = scrollTop - cardTop + stackPositionPx + itemStackDistance * i;
       } else if (scrollTop > pinEnd) {
+        // Keep cards at their final pinned position when scrolled past pinEnd
+        // This makes them static
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i;
       } else if (scrollTop < pinStart) {
         // Ensure cards are visible before pinning starts
         translateY = 0;
+      }
+
+      // Ensure last card stays fully visible for both mobile and desktop
+      if (i === cardsRef.current.length - 1) {
+        const cardHeight = card.offsetHeight;
+        const cardStackOffset = stackPositionPx + itemStackDistance * i;
+        const cardBottom = cardTop + translateY + cardHeight;
+        const viewportBottom = scrollTop + containerHeight;
+        
+        // When scrolled past pinEnd, ensure the last card's bottom stays visible
+        // This prevents achievements from hiding the last project
+        if (scrollTop > pinEnd) {
+          // Calculate the final static position
+          const finalTranslateY = pinEnd - cardTop + cardStackOffset;
+          const finalCardBottom = cardTop + finalTranslateY + cardHeight;
+          
+          // Ensure card bottom is at least at viewport bottom minus padding
+          const minVisibleBottom = viewportBottom - 60; // 60px padding to keep it visible
+          if (finalCardBottom < minVisibleBottom) {
+            // Adjust translateY to keep card visible
+            const adjustment = minVisibleBottom - finalCardBottom;
+            translateY = finalTranslateY + adjustment;
+          } else {
+            translateY = finalTranslateY;
+          }
+        }
       }
 
       const newTransform = {
@@ -193,12 +262,25 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       const lastTransform = lastTransformsRef.current.get(i);
 
+      // More lenient change detection on mobile to reduce unnecessary updates
+      const threshold = isMobile ? {
+        translateY: 0.5,
+        scale: 0.002,
+        rotation: 0.2,
+        blur: 0.2
+      } : {
+        translateY: 0.1,
+        scale: 0.001,
+        rotation: 0.1,
+        blur: 0.1
+      };
+
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
-        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
-        Math.abs(lastTransform.blur - newTransform.blur) > 0.1;
+        Math.abs(lastTransform.translateY - newTransform.translateY) > threshold.translateY ||
+        Math.abs(lastTransform.scale - newTransform.scale) > threshold.scale ||
+        Math.abs(lastTransform.rotation - newTransform.rotation) > threshold.rotation ||
+        Math.abs(lastTransform.blur - newTransform.blur) > threshold.blur;
 
       if (hasChanged) {
         const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale3d(${newTransform.scale}, ${newTransform.scale}, 1) rotate(${newTransform.rotation}deg)`;
@@ -209,16 +291,27 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         const isScrollingUp = scrollDirectionRef.current === 'up';
         const scrollSpeed = Math.abs(scrollDelta);
         
-        // Only disable transitions for very fast scrolling
-        if (isScrollingRef.current && scrollSpeed > 50) {
-          card.style.transition = 'none';
+        // Mobile-optimized transitions: shorter duration, simpler easing
+        if (isMobile) {
+          // On mobile, use shorter transitions and disable for fast scrolling
+          if (isScrollingRef.current && scrollSpeed > 30) {
+            card.style.transition = 'none';
+          } else {
+            const transitionDuration = isScrollingUp ? '0.2s' : '0.15s';
+            card.style.transition = `transform ${transitionDuration} ease-out, filter ${transitionDuration} ease-out`;
+          }
         } else {
-          const transitionDuration = isScrollingUp ? '0.4s' : '0.3s';
-          const transitionEasing = isScrollingUp 
-            ? 'cubic-bezier(0.25, 0.1, 0.25, 1)' 
-            : 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          
-          card.style.transition = `transform ${transitionDuration} ${transitionEasing}, filter ${transitionDuration} ${transitionEasing}`;
+          // Desktop: smoother, longer transitions
+          if (isScrollingRef.current && scrollSpeed > 50) {
+            card.style.transition = 'none';
+          } else {
+            const transitionDuration = isScrollingUp ? '0.4s' : '0.3s';
+            const transitionEasing = isScrollingUp 
+              ? 'cubic-bezier(0.25, 0.1, 0.25, 1)' 
+              : 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            card.style.transition = `transform ${transitionDuration} ${transitionEasing}, filter ${transitionDuration} ${transitionEasing}`;
+          }
         }
         
         card.style.willChange = 'transform, filter';
@@ -258,7 +351,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     calculateProgress,
     parsePercentage,
     getScrollData,
-    getElementOffset
+    getElementOffset,
+    isMobile
   ]);
 
   const handleScroll = useCallback(() => {
@@ -273,27 +367,46 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     // Update transforms
     updateCardTransforms();
     
-    // Mark scrolling as stopped after a delay
+    // Mark scrolling as stopped after a delay (longer on mobile for smoother feel)
+    const delay = isMobile ? 200 : 150;
     scrollTimeoutRef.current = setTimeout(() => {
       isScrollingRef.current = false;
       // Force one more update with transitions enabled
       updateCardTransforms();
-    }, 150);
-  }, [updateCardTransforms]);
+    }, delay);
+  }, [updateCardTransforms, isMobile]);
 
   const setupLenis = useCallback(() => {
     // Disable Lenis on mobile devices for stable native scrolling
     if (isMobile) {
-      // Use native scroll events on mobile with throttling
+      // Use native scroll events on mobile with optimized throttling
       let rafId: number | null = null;
+      let lastUpdateTime = 0;
+      const throttleDelay = 16; // ~60fps max update rate
+      
       const scrollHandler = () => {
-        if (rafId) {
-          cancelAnimationFrame(rafId);
+        const now = performance.now();
+        
+        // Throttle updates to prevent excessive calculations
+        if (now - lastUpdateTime < throttleDelay) {
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+          }
+          rafId = requestAnimationFrame(() => {
+            lastUpdateTime = performance.now();
+            handleScroll();
+            rafId = null;
+          });
+        } else {
+          lastUpdateTime = now;
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+          }
+          rafId = requestAnimationFrame(() => {
+            handleScroll();
+            rafId = null;
+          });
         }
-        rafId = requestAnimationFrame(() => {
-          handleScroll();
-          rafId = null;
-        });
       };
       
       if (useWindowScroll) {
@@ -467,14 +580,21 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         scrollBehavior: isMobile ? 'auto' : 'smooth',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
-        willChange: 'scroll-position',
+        willChange: isMobile ? 'auto' : 'scroll-position',
         height: useWindowScroll ? 'auto' : '100%',
-        touchAction: 'pan-y'
+        touchAction: 'pan-y',
+        // Mobile optimizations
+        ...(isMobile && {
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
+          perspective: '1000px',
+          WebkitPerspective: '1000px'
+        })
       }}
     >
-        <div className="scroll-stack-inner pt-[5vh] md:pt-[10vh] px-4 md:px-8 lg:px-20 pb-[25vh] min-h-[300vh]">
+        <div className="scroll-stack-inner pt-[5vh] md:pt-[10vh] px-4 md:px-8 lg:px-20 pb-0 min-h-[250vh] md:min-h-[200vh]">
           {children}
-          {/* Spacer so the last pin can release cleanly */}
+          {/* Spacer so the last pin can release cleanly - increased on mobile */}
           <div className="scroll-stack-end w-full h-px" />
         </div>
       </div>

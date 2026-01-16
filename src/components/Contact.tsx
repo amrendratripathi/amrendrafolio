@@ -8,8 +8,8 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "amrendraramtripathibtech23-27@liet.in",
-      action: "mailto:amrendraramtripathibtech23-27@liet.in",
+      value: "rajjubabu06@gmail.com",
+      action: "mailto:rajjubabu06@gmail.com",
     },
     {
       icon: Phone,
@@ -44,7 +44,7 @@ const Contact = () => {
       icon: Mail,
       label: "Email",
       username: "Get in touch",
-      action: "mailto:amrendraramtripathibtech23-27@liet.in",
+      action: "mailto:rajjubabu06@gmail.com",
       color: "hover:text-primary",
     },
   ];
@@ -160,7 +160,7 @@ const Contact = () => {
 
                     {/* Send Email Button */}
                     <a
-                      href="mailto:amrendraramtripathibtech23-27@liet.in?subject=Want%20to%20collaborate%20with%20you"
+                      href="mailto:rajjubabu06@gmail.com?subject=Want%20to%20collaborate%20with%20you"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full"
